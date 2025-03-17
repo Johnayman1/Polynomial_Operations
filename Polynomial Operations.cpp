@@ -16,9 +16,10 @@
 // < ========================================================================================== >
 
 #include <bits/stdc++.h>
+
 using namespace std;
 
-bool isInteger(const string& str) {
+bool isInteger(const string &str) {
     static const regex integerPattern(R"(^-?\d+$)");
     return regex_match(str, integerPattern);
 }
@@ -27,34 +28,34 @@ bool isInteger(const string& str) {
 
 class Polynomial {
     int degree;
-    int* coefficients;
+    int *coefficients;
 
 public:
-    Polynomial() = default ;
-    Polynomial(int degree) ;
+    Polynomial() = default;
+
+    Polynomial(int degree);
+
     ~Polynomial();                      // Destructor
 
-    void displayMenu(Polynomial polynomial1 , const Polynomial& polynomial2) const;                           // Display the menu
-    void add(const Polynomial& other);              // Add two polynomial
-    void subtract(const Polynomial& other);         // Subtract another polynomial from this polynomia
-    void displayPolynomial() const;               // Display the polynomial
+    void displayMenu(Polynomial polynomial1, const Polynomial &polynomial2) const;                  // Display the menu.
+    void add(const Polynomial &other);                                                            // Add two polynomial.
+    void subtract(const Polynomial &other);                         // Subtract another polynomial from this polynomial.
+    void displayPolynomial() const;                                                           // Display the polynomial.
 };
 
 // ----------------------------------------------- CLASS IMPLEMENTATION
 // --------------------- CONSTRUCTOR & DESTRUCTOR
 
 
-Polynomial::Polynomial(int degree ){
+Polynomial::Polynomial(int degree) {
     this->degree = degree;
     this->coefficients = new int[degree + 2];
 
-    if(degree > 0) {
-        cout << "Please , enter coefficients of Polynomial: ";
+    if (degree > 0) {
+        cout << "Please , enter coefficients of Polynomial:";
         for (int i = 0; i < degree + 2; i++)
-            cin >> this->coefficients[i] ;
-
+            cin >> this->coefficients[i];
     }
-
 }
 
 Polynomial::~Polynomial() {
@@ -64,49 +65,46 @@ Polynomial::~Polynomial() {
 // --------------------- ADD TWO POLYNOMIALS
 void Polynomial::add(const Polynomial &other) {
     const int n = max(this->degree, other.degree);
-     Polynomial result{};
+    Polynomial result{};
 
-    result.degree = n ;
+    result.degree = n;
     result.coefficients = new int[n + 2];
 
-    for (int i = 0 ; i < n + 2; i++) {
-        if (i < this->degree + 2 && i < other.degree + 2) result.coefficients[i] = coefficients[i] + other.coefficients[i];
+    for (int i = 0; i < n + 2; i++) {
+        if (i < this->degree + 2 && i < other.degree + 2)
+            result.coefficients[i] = coefficients[i] + other.coefficients[i];
         else {
             if (this->degree > other.degree) {
-                result.coefficients[i] = this->coefficients[i] ;
-            }else {
-                result.coefficients[i] = other.coefficients[i] ;
+                result.coefficients[i] = this->coefficients[i];
+            } else {
+                result.coefficients[i] = other.coefficients[i];
             }
         }
     }
-    cout << "Polynomial addition is : " ;
-    result.displayPolynomial() ;
+    cout << "Polynomial addition is : ";
+    result.displayPolynomial();
 }
 
 // --------------------- SUBTRACT TWO POLYNOMIALS
 void Polynomial::subtract(const Polynomial &other) {
-
     //cout << "Polynomial Subtraction is : " ;
     //result.displayPolynomial() ;
 }
 
 // --------------------- DISPLAY THE POLYNOMIAL
 void Polynomial::displayPolynomial() const {
-
-    // Wrong watch the example in the PDF
-
-    for (int i = 0; i < degree + 2; i++) {
+    for (int i = 0; i < degree + 1; i++) {
         cout << coefficients[i];
         if (i < degree) {
             cout << "x^" << (degree - i) << " + ";
         }
     }
-    cout << " = " <<coefficients[degree+1] << endl;
+    cout << " = " << coefficients[degree + 1] << endl;
     cout << endl;
 }
-// --------------------- DISPLAY THE MENU
-void Polynomial::displayMenu(Polynomial polynomial1 , const Polynomial& polynomial2) const {
 
+// --------------------- DISPLAY THE MENU
+void Polynomial::displayMenu(Polynomial polynomial1, const Polynomial &polynomial2) const {
     cout << "\n1) Calculate the sum" << endl;
     cout << "2) Calculate the difference" << endl;
     cout << "3) Display the polynomial" << endl;
@@ -117,65 +115,66 @@ void Polynomial::displayMenu(Polynomial polynomial1 , const Polynomial& polynomi
     getline(cin, choice);
 
     if (choice != "1" && choice != "2" && choice != "3" && choice != "4") {
-        cout << "Invalid choice, Please try again: " ;
+        cout << "Invalid choice, Please try again: ";
         getline(cin, choice);
     }
     cout << endl;
 
-    if (choice ==  "1")  polynomial1.add(polynomial2);
+    if (choice == "1") polynomial1.add(polynomial2);
     else if (choice == "2") polynomial1.subtract(polynomial2);
     else if (choice == "3") {
-        cout << "First polynomial is : " ;polynomial1.displayPolynomial();
+        cout << "First polynomial is : ";
+        polynomial1.displayPolynomial();
         cout << endl;
-        cout << "Second Polynomial is : " ;polynomial2.displayPolynomial();
-    }else exit(0);
+        cout << "Second Polynomial is : ";
+        polynomial2.displayPolynomial();
+    } else exit(0);
 }
 
 // ----------------------------------------------- MAIN FUNCTION
 
 int main() {
-
     cout << "\n------------- WELCOME TO OUR POLYNOMIAL OPERATIONS APPLICATION -------------\n" << endl;
 
-    int degree1 , degree2;
-    cout << "Please, enter order of First Polynomial: ";
+    int degree1, degree2;
+    cout << "Please, enter order of First Polynomial:";
     cin >> degree1;
 
-    while (cin.fail() || degree1 < 0) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Invalid input. Please enter a non-negative integer: ";
-            cin >> degree1;
-        }
-
-    const Polynomial polynomial1(degree1);
-    cout << "Please, enter order of Second Polynomial: ";
-    cin >> degree2;
-
-    while (cin.fail() || degree1 < 0) {
+    while (cin.fail() || degree1 <= 0) {
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "Invalid input. Please enter a non-negative integer: ";
+        cout << "Invalid input, Please enter a positive integer:";
+        cin >> degree1;
+    }
+
+    const Polynomial polynomial1(degree1);
+    cout << "Please, enter order of Second Polynomial:";
+    cin >> degree2;
+
+    while (cin.fail() || degree1 <= 0) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Invalid input, Please enter a positive integer:";
         cin >> degree1;
     }
 
     const Polynomial polynomial2(degree2);
 
-    cin.ignore(); char choice;
+    cin.ignore();
+    char choice;
 
     while (true) {
-
-        polynomial1.displayMenu(polynomial1 , polynomial2);
+        polynomial1.displayMenu(polynomial1, polynomial2);
         cout << "Do you want to continue? (y/n):";
         cin >> choice;
 
         while (tolower(choice) != 'y' && tolower(choice) != 'n') {
-            cout << "Invalid choice. Please try again: " ;
+            cout << "Invalid choice. Please try again:";
             cin >> choice;
         }
 
         if (tolower(choice) == 'n') {
-            cout << "\nTHANKS FOR USING OUR APPLICATION :" << endl;
+            cout << "\nTHANKS FOR USING OUR APPLICATION:)" << endl;
             exit(0);
         }
     }
