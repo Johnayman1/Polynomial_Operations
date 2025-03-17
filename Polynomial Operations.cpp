@@ -93,13 +93,15 @@ void Polynomial::subtract(const Polynomial &other) {
 
 // --------------------- DISPLAY THE POLYNOMIAL
 void Polynomial::displayPolynomial() const {
-    for (int i = 0; i < degree + 1; i++) {
-        cout << coefficients[i];
-        if (i < degree) {
-            cout << "x^" << (degree - i) << " + ";
-        }
+    for (int i = degree + 1; i > 0; i--) {
+        if (coefficients[i] == 0) continue;
+
+        if (i == degree + 1) cout << coefficients[i];
+        else cout << " + " << coefficients[i];
+
+        if (i > 1) cout << "x^" << (i - 1);
     }
-    cout << " = " << coefficients[degree + 1] << endl;
+    cout << " = " << coefficients[0] << endl;
     cout << endl;
 }
 
