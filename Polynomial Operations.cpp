@@ -130,54 +130,59 @@ void Polynomial::displayMenu(Polynomial polynomial1, const Polynomial &polynomia
         cout << endl;
         cout << "Second Polynomial is : ";
         polynomial2.displayPolynomial();
-    } else exit(0);
+    } else {
+        cout << "\nTHANKS FOR USING OUR APPLICATION:)" << endl;
+        exit(0);
+    }
+        
 }
 
 // ----------------------------------------------- MAIN FUNCTION
 
 int main() {
     cout << "\n------------- WELCOME TO OUR POLYNOMIAL OPERATIONS APPLICATION -------------\n" << endl;
-
-    int degree1, degree2;
-    cout << "Please, enter order of First Polynomial:";
-    cin >> degree1;
-
-    while (cin.fail() || degree1 <= 0) {
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "Invalid input, Please enter a positive integer:";
+    while (true){
+        int degree1, degree2;
+        cout << "Please, enter order of First Polynomial:";
         cin >> degree1;
-    }
 
-    const Polynomial polynomial1(degree1);
-    cout << "Please, enter order of Second Polynomial:";
-    cin >> degree2;
-
-    while (cin.fail() || degree1 <= 0) {
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "Invalid input, Please enter a positive integer:";
-        cin >> degree1;
-    }
-
-    const Polynomial polynomial2(degree2);
-
-    cin.ignore();
-    char choice;
-
-    while (true) {
-        polynomial1.displayMenu(polynomial1, polynomial2);
-        cout << "Do you want to continue? (y/n):";
-        cin >> choice;
-
-        while (tolower(choice) != 'y' && tolower(choice) != 'n') {
-            cout << "Invalid choice. Please try again:";
-            cin >> choice;
+        while (cin.fail() || degree1 <= 0) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid input, Please enter a positive integer:";
+            cin >> degree1;
         }
 
-        if (tolower(choice) == 'n') {
-            cout << "\nTHANKS FOR USING OUR APPLICATION:)" << endl;
-            exit(0);
+        const Polynomial polynomial1(degree1);
+        cout << "Please, enter order of Second Polynomial:";
+        cin >> degree2;
+
+        while (cin.fail() || degree1 <= 0) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid input, Please enter a positive integer:";
+            cin >> degree1;
+        }
+
+        const Polynomial polynomial2(degree2);
+
+        cin.ignore();
+        char choice;
+
+        while (true) {
+            polynomial1.displayMenu(polynomial1, polynomial2);
+            cout << "Do you want to continue? (y/n):";
+            cin >> choice;
+
+            while (tolower(choice) != 'y' || tolower(choice) != 'n') {
+                cout << "Invalid choice. Please try again:";
+                cin >> choice;
+            }
+
+            if (tolower(choice) == 'n') {
+                cout << "\nTHANKS FOR USING OUR APPLICATION:)" << endl;
+                exit(0);
+            }
         }
     }
 }
