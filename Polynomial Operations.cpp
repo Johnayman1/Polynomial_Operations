@@ -70,7 +70,7 @@ void Polynomial::add(const Polynomial &other) {
     result.coefficients = new int[n + 2];
 
     for (int i = 0 ; i < n + 2; i++) {
-        if (i < this->degree + 2 && i < n + 2) result.coefficients[i] = coefficients[i] + other.coefficients[i];
+        if (i < this->degree + 2 && i < other.degree + 2) result.coefficients[i] = coefficients[i] + other.coefficients[i];
         else {
             if (this->degree > other.degree) {
                 result.coefficients[i] = this->coefficients[i] ;
