@@ -109,34 +109,34 @@ void Polynomial::displayPolynomial() const {
 // --------------------- DISPLAY THE MENU
 void Polynomial::displayMenu(Polynomial polynomial1, const Polynomial &polynomial2) const {
 
-    cout << "\n1) Calculate the sum" << endl;
-    cout << "2) Calculate the difference" << endl;
-    cout << "3) Display the polynomial" << endl;
-    cout << "4) Exit " << endl;
-    cout << "\nPlease, enter your choice: ";
+    while (true) {
+        cout << "\n1) Calculate the sum" << endl;
+        cout << "2) Calculate the difference" << endl;
+        cout << "3) Display the polynomial" << endl;
+        cout << "0) Exit " << endl;
+        cout << "\nPlease, enter your choice: ";
 
-    string choice;
-    getline(cin, choice);
-
-    if (choice != "1" && choice != "2" && choice != "3" && choice != "4") {
-        cout << "Invalid choice, Please try again: ";
+        string choice;
         getline(cin, choice);
-    }
-    cout << endl;
 
-    if (choice == "1") polynomial1.add(polynomial2);
-    else if (choice == "2") polynomial1.subtract(polynomial2);
-    else if (choice == "3") {
-        cout << "First polynomial is : ";
-        polynomial1.displayPolynomial();
+        if (choice != "1" && choice != "2" && choice != "3" && choice != "0") {
+            cout << "Invalid choice, Please try again: ";
+            getline(cin, choice);
+        }
         cout << endl;
-        cout << "Second Polynomial is : ";
-        polynomial2.displayPolynomial();
-    } else {
-        cout << "\n************** THANKS FOR USING OUR APPLICATION ***************" << endl;
-        return;
-    }
 
+        if (choice == "1") polynomial1.add(polynomial2);
+        else if (choice == "2") polynomial1.subtract(polynomial2);
+        else if (choice == "3") {
+            cout << "First polynomial is : ";
+            polynomial1.displayPolynomial();
+            cout << endl;
+            cout << "Second Polynomial is : ";
+            polynomial2.displayPolynomial();
+        } else if (choice == "0") {
+            return;
+        }
+    }
 }
 
 // ----------------------------------------------- MAIN FUNCTION
@@ -145,43 +145,43 @@ void Polynomial::displayMenu(Polynomial polynomial1, const Polynomial &polynomia
 int main() {
     cout << "\n------------- WELCOME TO OUR POLYNOMIAL OPERATIONS APPLICATION -------------\n" << endl;
 
-        string degree1, degree2;
+    string degree1, degree2;
 
+    while (true) {
         cout << "Please, enter order of First Polynomial: ";
-        cin >> degree1;
-
-    while (!isValidNumber(degree1)) {
-        cout << "Invalid input, Please enter a positive integer: ";
         getline(cin, degree1);
-    }
+        while (!isValidNumber(degree1)) {
+            cout << "Invalid input, Please enter a positive integer: ";
+            getline(cin, degree1);
+        }
 
         Polynomial polynomial1(stoi(degree1));
 
+        cin.ignore();
         cout << "Please, enter order of Second Polynomial: ";
-        cin >> degree2;
-
-    while (!isValidNumber(degree1)) {
-        cout << "Invalid input, Please enter a positive integer: ";
-        getline(cin, degree1);
-    }
+        getline(cin, degree2);
+        while (!isValidNumber(degree2)) {
+            cout << "Invalid input, Please enter a positive integer: ";
+            getline(cin, degree2);
+        }
 
         Polynomial polynomial2(stoi(degree2));
 
-
-        while (true) { // Loop for menu interaction
-
-            cin.ignore();
-            char choice;
-
+        cin.ignore();
         polynomial1.displayMenu(polynomial1, polynomial2);
 
+        char choice;
         cout << "Do you want to continue? (y/n): ";
         cin >> choice;
 
         while (tolower(choice) != 'y' && tolower(choice) != 'n') {
             cout << "Invalid choice. Please try again: ";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
             cin >> choice;
         }
+
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');  
 
         if (tolower(choice) == 'n') {
             cout << "\n***************** THANKS FOR USING OUR APPLICATION *****************" << endl;
@@ -189,3 +189,4 @@ int main() {
         }
     }
 }
+
