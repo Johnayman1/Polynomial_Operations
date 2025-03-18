@@ -19,9 +19,9 @@
 
 using namespace std;
 
-bool isInteger(const string &str) {
-    static const regex integerPattern(R"(^-?\d+$)");
-    return regex_match(str, integerPattern);
+bool isValidNumber(const string &input) {
+    regex pattern("^[1-9][0-9]*$"); // Matches positive integers only (no spaces, letters, etc.)
+    return regex_match(input, pattern);
 }
 
 // ----------------------------------------------- CLASS DEFINITION
@@ -107,82 +107,78 @@ void Polynomial::displayPolynomial() const {
 
 // --------------------- DISPLAY THE MENU
 void Polynomial::displayMenu(Polynomial polynomial1, const Polynomial &polynomial2) const {
-    cout << "\n1) Calculate the sum" << endl;
-    cout << "2) Calculate the difference" << endl;
-    cout << "3) Display the polynomial" << endl;
-    cout << "4) Exit " << endl;
-    cout << "\nPlease, enter your choice: ";
+    while (true) {
+        cout << "\n1) Calculate the sum" << endl;
+        cout << "2) Calculate the difference" << endl;
+        cout << "3) Display the polynomial" << endl;
+        cout << "0) Exit from menu" << endl;
+        cout << "\nPlease, enter your choice: ";
 
-    string choice;
-    getline(cin, choice);
-
-    if (choice != "1" && choice != "2" && choice != "3" && choice != "4") {
-        cout << "Invalid choice, Please try again: ";
+        string choice;
         getline(cin, choice);
-    }
-    cout << endl;
 
-    if (choice == "1") polynomial1.add(polynomial2);
-    else if (choice == "2") polynomial1.subtract(polynomial2);
-    else if (choice == "3") {
-        cout << "First polynomial is : ";
-        polynomial1.displayPolynomial();
+        while (choice != "1" && choice != "2" && choice != "3" && choice != "0") {
+            cout << "Invalid choice, Please try again: ";
+            getline(cin, choice);
+        }
         cout << endl;
-        cout << "Second Polynomial is : ";
-        polynomial2.displayPolynomial();
-    } else {
-        cout << "\nTHANKS FOR USING OUR APPLICATION:)" << endl;
-        exit(0);
+
+        if (choice == "1")
+            polynomial1.add(polynomial2);
+        else if (choice == "2")
+            polynomial1.subtract(polynomial2);
+        else if (choice == "3") {
+            cout << "First polynomial is : ";
+            polynomial1.displayPolynomial();
+            cout << endl;
+            cout << "Second Polynomial is : ";
+            polynomial2.displayPolynomial();
+        }else if (choice == "0")
+            return;
     }
-        
+
 }
 
 // ----------------------------------------------- MAIN FUNCTION
 
 int main() {
     cout << "\n------------- WELCOME TO OUR POLYNOMIAL OPERATIONS APPLICATION -------------\n" << endl;
-    while (true){
-        int degree1, degree2;
-        cout << "Please, enter order of First Polynomial:";
-        cin >> degree1;
 
-        while (cin.fail() || degree1 <= 0) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Invalid input, Please enter a positive integer:";
-            cin >> degree1;
-        }
+    string degree1, degree2;
 
-        const Polynomial polynomial1(degree1);
-        cout << "Please, enter order of Second Polynomial:";
-        cin >> degree2;
+    cout << "Please, enter order of First Polynomial: ";
+    getline(cin, degree1);
+    while (!isValidNumber(degree1)) {
+        cout << "Invalid input, Please enter a positive integer: ";
+        getline(cin, degree1);
+    }
+    const Polynomial polynomial1(stoi(degree1));
 
-        while (cin.fail() || degree1 <= 0) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Invalid input, Please enter a positive integer:";
-            cin >> degree1;
-        }
+    cin.ignore();
+    cout << "Please, enter order of Second Polynomial: ";
+    getline(cin, degree2);
+    while (!isValidNumber(degree2)) {
+        cout << "Invalid input, Please enter a positive integer: ";
+        getline(cin, degree2);
+    }
 
-        const Polynomial polynomial2(degree2);
+    const Polynomial polynomial2(stoi(degree2));
 
-        cin.ignore();
-        char choice;
+    cin.ignore();
+    string choice;
+    while (true) { // Loop for menu interaction
+        polynomial1.displayMenu(polynomial1, polynomial2);
 
         while (true) {
-            polynomial1.displayMenu(polynomial1, polynomial2);
-            cout << "Do you want to continue? (y/n):";
-            cin >> choice;
-
-            while (tolower(choice) != 'y' || tolower(choice) != 'n') {
-                cout << "Invalid choice. Please try again:";
-                cin >> choice;
+            cout << "Do you want to continue? (y/n): ";
+            getline(cin, choice);
+            if (choice == "Y" || choice == "y")
+                break; // Show the menu again
+            if (choice == "N" || choice == "n") {
+                cout << "\nTHANKS FOR USING OUR APPLICATION :)" << endl;
+                return 0;
             }
-
-            if (tolower(choice) == 'n') {
-                cout << "\nTHANKS FOR USING OUR APPLICATION:)" << endl;
-                exit(0);
-            }
+            cout << "Invalid choice. Please try again." << endl;
         }
     }
 }
