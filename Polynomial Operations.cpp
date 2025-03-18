@@ -38,7 +38,7 @@ public:
 
     ~Polynomial();                      // Destructor
 
-    void displayMenu(Polynomial polynomial1, const Polynomial &polynomial2) const;                  // Display the menu.
+    void displayMenu(Polynomial& polynomial1, const Polynomial &polynomial2) const;                  // Display the menu.
     void add(const Polynomial &other);                                                            // Add two polynomial.
     void subtract(const Polynomial &other);                         // Subtract another polynomial from this polynomial.
     void displayPolynomial() const;                                                           // Display the polynomial.
@@ -107,7 +107,7 @@ void Polynomial::displayPolynomial() const {
 }
 
 // --------------------- DISPLAY THE MENU
-void Polynomial::displayMenu(Polynomial polynomial1, const Polynomial &polynomial2) const {
+void Polynomial::displayMenu( Polynomial& polynomial1, const Polynomial& polynomial2) const {
 
     while (true) {
         cout << "\n1) Calculate the sum" << endl;
@@ -140,8 +140,6 @@ void Polynomial::displayMenu(Polynomial polynomial1, const Polynomial &polynomia
 }
 
 // ----------------------------------------------- MAIN FUNCTION
-
-
 int main() {
     cout << "\n------------- WELCOME TO OUR POLYNOMIAL OPERATIONS APPLICATION -------------\n" << endl;
 
@@ -177,11 +175,11 @@ int main() {
         while (tolower(choice) != 'y' && tolower(choice) != 'n') {
             cout << "Invalid choice. Please try again: ";
             cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cin >> choice;
         }
 
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');  
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
         if (tolower(choice) == 'n') {
             cout << "\n***************** THANKS FOR USING OUR APPLICATION *****************" << endl;
