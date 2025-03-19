@@ -19,7 +19,7 @@
 using namespace std;
 
 bool isValidNumber(const string &input) {
-    regex pattern("^[1-9][0-9]*$");          // Matches positive integers only (no spaces, letters, etc.)
+    regex pattern("^(0|[1-9][0-9]*)$");         // Matches positive integers only (no spaces, letters, etc.)
     return regex_match(input, pattern);
 }
 
@@ -32,6 +32,7 @@ class Polynomial {
 public:
     Polynomial() = default;
     Polynomial(int degree);
+    void splitString(string& input, int& index);
 
     ~Polynomial();                      // Destructor
 
@@ -50,14 +51,47 @@ Polynomial::Polynomial(int degree) {
     this->coefficients = new int[degree + 2];
 
     if (degree > 0) {
-        cout << "Please , enter coefficients of Polynomial:";
-        for (int i = 0; i < degree + 2; i++)
-            cin >> this->coefficients[i];
+        cout << "Please, enter coefficients of Polynomial:";
+        string element;
+
+        // Handle int and long.
+        getline(cin, element);
+        int index = 0;
+        splitString(element, index);
     }
 }
 
 Polynomial::~Polynomial() {
     delete[] coefficients;
+}
+
+// --------------------- SPLIT STRING
+
+void Polynomial::splitString(string& input, int& index) {
+    while (true) {
+        istringstream stream(input);
+        string token;
+        bool isValid = true;
+
+        int tempIndex = index;
+
+        while (stream >> token && tempIndex < this->degree + 2) {
+            if (isValidNumber(token)) {
+                this->coefficients[tempIndex++] = stoi(token);
+            }
+            else {
+                isValid = false;
+                break;
+            }
+        }
+
+        if (isValid && tempIndex == degree + 2) break;
+
+        // Handle invalid input
+        cout << "Invalid input..." << endl;
+        cout << "Please, enter positive coefficients of Polynomial: ";
+        getline(cin, input);
+    }
 }
 
 // --------------------- ADD TWO POLYNOMIALS
@@ -69,16 +103,11 @@ void Polynomial::add(const Polynomial &other) {
     result.degree = n;
     result.coefficients = new int[n + 2];
 
+    // Use 0 for missing coefficients.
     for (int i = 0; i < n + 2; i++) {
-        if (i < this->degree + 2 && i < other.degree + 2)
-            result.coefficients[i] = coefficients[i] + other.coefficients[i];
-        else {
-            if (this->degree > other.degree) {
-                result.coefficients[i] = this->coefficients[i];
-            } else {
-                result.coefficients[i] = other.coefficients[i];
-            }
-        }
+        int firstCoefficient = (i < this->degree + 2) ? this->coefficients[i] : 0;
+        int secondCoefficient = (i < other.degree + 2) ? other.coefficients[i] : 0;
+        result.coefficients[i] = firstCoefficient + secondCoefficient;
     }
    
     cout << "Polynomial addition is : ";
@@ -94,21 +123,17 @@ void Polynomial::subtract(const Polynomial &other) {
     result.degree = n;
     result.coefficients = new int[n + 2];
 
+    // Use 0 for missing coefficients.
     for (int i = 0; i < n + 2; i++) {
-        if (i < this->degree + 2 && i < other.degree + 2)
-            result.coefficients[i] = other.coefficients[i] - coefficients[i];
-        else {
-            if (this->degree > other.degree) {
-                result.coefficients[i] = this->coefficients[i];
-            } else {
-                result.coefficients[i] = other.coefficients[i];
-            }
-        }
+        int firstCoefficient = (i < this->degree + 2) ? this->coefficients[i] : 0;
+        int secondCoefficient = (i < other.degree + 2) ? other.coefficients[i] : 0;
+        result.coefficients[i] = secondCoefficient - firstCoefficient;
     }
 
-    cout << "Polynomial Subtraction is : " ;
-    result.displayPolynomial() ;
+    cout << "Polynomial Subtraction is: ";
+    result.displayPolynomial();
 }
+
 
 // --------------------- DISPLAY THE POLYNOMIAL
 
@@ -116,7 +141,7 @@ void Polynomial::displayPolynomial() const {
     for (int i = degree + 1; i > 0; i--) {
         if (coefficients[i] == 0) continue;
 
-        if (i == degree + 1 && coefficients[i] != 1) cout << coefficients[i];
+        if (i == degree + 1) cout << coefficients[i];
         else if (coefficients[i] < 0) {
             cout << " - ";
             if (coefficients[i] != -1 || i == 1) cout << -coefficients[i];
@@ -160,7 +185,6 @@ void Polynomial::displayMenu( Polynomial& polynomial1, const Polynomial& polynom
         else if (choice == "3") {
             cout << "First polynomial is : ";
             polynomial1.displayPolynomial();
-            cout << endl;
             cout << "Second Polynomial is : ";
             polynomial2.displayPolynomial();
         } 
@@ -185,7 +209,6 @@ int main() {
 
         Polynomial polynomial1(stoi(degree1));
 
-        cin.ignore();
         cout << "Please, enter order of Second Polynomial: ";
         getline(cin, degree2);
         while (!isValidNumber(degree2)) {
@@ -195,7 +218,6 @@ int main() {
 
         Polynomial polynomial2(stoi(degree2));
 
-        cin.ignore();
         polynomial1.displayMenu(polynomial1, polynomial2);
 
         char choice;
