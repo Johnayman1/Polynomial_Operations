@@ -49,12 +49,12 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/georg/OneDrive/Desktop/DStructure/Assigment/1/Polynomial_Operations/cmake-build-debug",
-		"source" : "C:/Users/georg/OneDrive/Desktop/DStructure/Assigment/1/Polynomial_Operations"
+		"build" : "D:/Assignments/Data Structures/Assignment 1/Polynomial_Operations/cmake-build-debug",
+		"source" : "D:/Assignments/Data Structures/Assignment 1/Polynomial_Operations"
 	},
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 6
+		"minor" : 7
 	}
 }
