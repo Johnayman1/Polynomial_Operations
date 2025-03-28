@@ -18,11 +18,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-bool isValidNumber(const string &input) {
-    // Matches the zero and positive integers only (no spaces, letters, etc.)
-    regex pattern("^(0|[1-9][0-9]*)$");
-    return regex_match(input, pattern);
-}
+bool isValidNumber(const string &input) ;    // Helper function to validate the numbers
 
 // ----------------------------------------------- CLASS DEFINITION
 
@@ -38,7 +34,7 @@ public:
 
     static void displayMenu(Polynomial& polynomial1, const Polynomial &polynomial2);
     void add(const Polynomial &other);
-    void splitString(string& input, int& index);
+    void splitString(string& input, const int& index);
     void subtract(const Polynomial &other);
     void displayPolynomial() const;
 };
@@ -48,8 +44,8 @@ public:
 bool Status ;
 // --------------------- CONSTRUCTOR & DESTRUCTOR
 
-Polynomial::Polynomial(int degree, bool IN) {
-    if(IN) {
+Polynomial::Polynomial(const int degree, bool Help) {
+    if(Help) {
         this->degree = degree;
         this->coefficients = new int[degree + 2];
 
@@ -75,7 +71,7 @@ Polynomial::~Polynomial() {
 
 // --------------------- SPLIT STRING
 
-void Polynomial::splitString(string& input, int& index) {
+void Polynomial::splitString(string& input, const int& index) {
     while (true) {
         istringstream stream(input);
         string token;
@@ -118,7 +114,7 @@ void Polynomial::add(const Polynomial &other) {
         int secondCoefficient = (i < other.degree + 2) ? other.coefficients[i] : 0;
         result.coefficients[i] = firstCoefficient + secondCoefficient;
     }
-   
+
     cout << "Sum of polynomials: ";
     result.displayPolynomial();
 }
@@ -192,20 +188,23 @@ void Polynomial::displayMenu(Polynomial& polynomial1, const Polynomial& polynomi
         if (choice == "1") polynomial1.add(polynomial2);
         else if (choice == "2") polynomial1.subtract(polynomial2);
         else if (choice == "3") {
+
             cout << "First polynomial: ";
             polynomial1.displayPolynomial();
+
             cout << "Second polynomial: ";
             polynomial2.displayPolynomial();
-        } 
+        }
         else return;
     }
 }
 
 // ----------------------------------------------- KIND OF I/P
 void runFromTerminal(){
+
     string degree1, degree2;
-    Status = true;
-    while (true) {
+    Status = true ;
+
         cout << "Please, enter order of First Polynomial: ";
         getline(cin, degree1);
         while (!isValidNumber(degree1)) {
@@ -216,6 +215,7 @@ void runFromTerminal(){
 
         cout << "Please, enter order of Second Polynomial: ";
         getline(cin, degree2);
+
         while (!isValidNumber(degree2)) {
             cout << "Invalid input, Please enter a positive integer: ";
             getline(cin, degree2);
@@ -224,20 +224,6 @@ void runFromTerminal(){
 
         Polynomial::displayMenu(polynomial1, polynomial2);
 
-        cout << "Do you want to continue? (y/n): ";
-        char choice; cin >> choice;
-
-        while (tolower(choice) != 'y' && tolower(choice) != 'n') {
-            cout << "Invalid choice. Please try again: ";
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cin >> choice;
-        }
-
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-        if (tolower(choice) == 'n') break;
-    }
 }
 
 void runFromFile() {
@@ -319,7 +305,7 @@ int main() {
             cout << "\nWhat do you want to do?" << endl;
             cout << "1) Polynomial System." << endl;
             cout << "2) Exit." << endl;
-            cout << "Please, enter your choice:";
+            cout << "\nPlease, enter your choice: ";
             getline(cin, choice);
 
             // Check the validity of input.
@@ -334,7 +320,7 @@ int main() {
             cout << "1) Run From Terminal." << endl;
             cout << "2) Run From File." << endl;
             cout << "3) Exit." << endl;
-            cout << "Please, enter your choice:";
+            cout << "\nPlease, enter your choice: ";
             getline(cin, choice);
 
             // Check the validity of input.
@@ -350,5 +336,11 @@ int main() {
             runFromFile();
         } else continue;
     }
-    cout << "\nTHANKS FOR USING OUR APPLICATION :)" << endl;
+    cout << "\n***************************** THANKS FOR USING OUR APPLICATION *****************************" << endl;
+}
+// Helper function
+bool isValidNumber(const string &input) {
+    // Matches the zero and positive integers only (no spaces, letters, etc.)
+    regex pattern("^(0|[1-9][0-9]*)$");
+    return regex_match(input, pattern);
 }
